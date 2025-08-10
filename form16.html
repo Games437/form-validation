@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>มจท.16 คำร้องขอโอนย้ายสาขาวิชาต่างคณะ</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #f8f9fa;
+            padding: 30px;
+        }
+
+        form {
+            max-width: 670px;
+            margin: auto;
+            background: #fff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        input[type="tel"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1.5px solid #ccc;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 38px;
+        }
+
+        input[type="radio"],
+        input[type="checkbox"] {
+            margin-right: 6px;
+            cursor: pointer;
+            accent-color: #3ca34d;
+        }
+
+        .error {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            margin-top: 20px;
+            background-color: #262626;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #000000;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 10;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            min-width: 300px;
+        }
+
+        .modal-content p {
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 25px;
+        }
+
+        .modal-content button {
+            padding: 10px 30px;
+            border-radius: 8px;
+            border: none;
+            background-color: #3ca34d;
+            color: white;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .modal-content button:hover {
+            background-color: #2d7d44;
+        }
+
+        .next-page-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #4a90e2;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .next-page-btn:hover {
+            background-color: #357ABD;
+        }
+    </style>
+</head>
+
+<body>
+    <form id="transferForm" novalidate>
+        <h2>มจท.16 คำร้องขอโอนย้ายสาขาวิชาต่างคณะ</h2>
+        <button class="next-page-btn" onclick="window.location.href='/event-booking.html'">
+            จองตั๋วกิจกรรม
+        </button>
+
+        <label for="date">วันที่</label>
+        <input type="date" id="date" name="date" />
+        <span class="error" id="dateError"></span>
+
+        <label for="facultyNew">คณะใหม่</label>
+        <input type="text" id="facultyNew" name="facultyNew" placeholder="กรุณากรอกชื่อคณะใหม่" />
+        <span class="error" id="facultyNewError"></span>
+
+        <label>คำนำหน้า</label>
+        <label><input type="radio" name="prefix" value="นาย"> นาย</label>
+        <label><input type="radio" name="prefix" value="นาง"> นาง</label>
+        <label><input type="radio" name="prefix" value="นางสาว"> นางสาว</label>
+        <span class="error" id="prefixError"></span>
+
+        <label for="fullname">ชื่อ-นามสกุล</label>
+        <input type="text" id="fullname" name="fullname" placeholder="สมชาย มรกต">
+        <span class="error" id="fullnameError"></span>
+
+        <label for="studentId">รหัสนักศึกษา</label>
+        <input type="text" id="studentId" name="studentId" placeholder="6701234567" maxlength="10">
+        <span class="error" id="studentIdError"></span>
+
+        <label for="phone">เบอร์โทรศัพท์มือถือ</label>
+        <input type="tel" id="phone" name="phone" placeholder="0891234567" maxlength="10">
+        <span class="error" id="phoneError"></span>
+
+        <label>หลักสูตร</label>
+        <label><input type="radio" name="program" value="4ปี" /> 4 ปี</label>
+        <label><input type="radio" name="program" value="4ปีเทียบเข้าเรียน" /> 4 ปีเทียบเข้าเรียน (2 ปี)</label>
+        <span class="error" id="programError"></span>
+
+        <label>ภาคเรียน</label>
+        <label><input type="radio" name="studyType" value="ปกติ" /> ภาคปกติ</label>
+        <label><input type="radio" name="studyType" value="สมทบ" /> ภาคสมทบ</label>
+        <span class="error" id="studyTypeError"></span>
+
+        <label for="majorOld">สาขาวิชาเดิม</label>
+        <input type="text" id="majorOld" name="majorOld" />
+        <span class="error" id="majorOldError"></span>
+
+        <label for="facultyOld">คณะเดิม</label>
+        <input type="text" id="facultyOld" name="facultyOld" />
+        <span class="error" id="facultyOldError"></span>
+
+        <label for="majorNew">สาขาวิชาใหม่</label>
+        <input type="text" id="majorNew" name="majorNew" />
+        <span class="error" id="majorNewError"></span>
+
+        <label for="reason">เหตุผลการโอนย้าย</label>
+        <textarea id="reason" name="reason" rows="3"></textarea>
+        <span class="error" id="reasonError"></span>
+
+        <!-- ส่วนยืนยันคุณสมบัติ -->
+        <div class="checkbox-group">
+            <label>
+                <input type="checkbox" id="qualificationCheck" />
+                ข้าพเจ้ามีคุณสมบัติครบถ้วนในการขอย้ายสาขาวิชา ดังนี้
+            </label>
+            <ul>
+                <li><strong>หลักสูตร 4 ปีเทียบเข้าเรียน (2 ปี)</strong>
+                    <ul>
+                        <li>ได้ศึกษาตามแผนการศึกษาในสาขาวิชาเดิมมาแล้วไม่น้อยกว่า 1 ภาคการศึกษาปกติ</li>
+                        <li>มีหน่วยกิตสะสมไม่น้อยกว่า 18 หน่วยกิต และมีแต้มระดับคะแนนเฉลี่ยสะสมไม่น้อยกว่า 2.00</li>
+                    </ul>
+                </li>
+                <li><strong>หลักสูตร 4 ปี</strong>
+                    <ul>
+                        <li>ได้ศึกษาตามแผนการศึกษาในสาขาวิชาเดิมมาแล้วไม่น้อยกว่า 2 ภาคการศึกษาปกติ</li>
+                        <li>มีหน่วยกิตสะสมไม่น้อยกว่า 30 หน่วยกิต และมีแต้มระดับคะแนนเฉลี่ยสะสมไม่น้อยกว่า 2.00</li>
+                    </ul>
+                </li>
+            </ul>
+            <label for="internalDeadline">และยื่นคำร้องโอนย้ายสาขาวิชาภายในคณะก่อนวันที่</label>
+            <input type="date" id="internalDeadline" />
+            <span class="error" id="qualificationError"></span>
+        </div>
+        
+
+        <button type="submit">ส่งคำร้อง</button>
+    </form>
+
+    <!-- Modal -->
+    <div class="modal" id="resultModal">
+        <div class="modal-content">
+            <p id="resultMessage"></p>
+            <button type="button" onclick="document.getElementById('resultModal').classList.remove('show')">ปิด</button>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("transferForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const date = document.getElementById("date").value.trim();
+            const dateError = document.getElementById("dateError");
+            const facultyNew = document.getElementById("facultyNew").value.trim();
+            const facultyNewError = document.getElementById("facultyNewError");
+            const prefix = document.querySelector('input[name="prefix"]:checked');
+            const prefixError = document.getElementById("prefixError");
+            const fullname = document.getElementById("fullname").value.trim();
+            const fullnameError = document.getElementById("fullnameError");
+            const studentId = document.getElementById("studentId").value.trim();
+            const studentIdError = document.getElementById("studentIdError");
+            const phone = document.getElementById("phone").value.trim();
+            const phoneError = document.getElementById("phoneError");
+            const program = document.querySelector('input[name="program"]:checked');
+            const programError = document.getElementById("programError");
+            const studyType = document.querySelector('input[name="studyType"]:checked');
+            const studyTypeError = document.getElementById("studyTypeError");
+            const majorOld = document.getElementById("majorOld").value.trim();
+            const majorOldError = document.getElementById("majorOldError");
+            const facultyOld = document.getElementById("facultyOld").value.trim();
+            const facultyOldError = document.getElementById("facultyOldError");
+            const majorNew = document.getElementById("majorNew").value.trim();
+            const majorNewError = document.getElementById("majorNewError");
+            const reason = document.getElementById("reason").value.trim();
+            const reasonError = document.getElementById("reasonError");
+            const qualificationCheck = document.getElementById("qualificationCheck").checked;
+            const qualificationError = document.getElementById("qualificationError");
+            const internalDeadline = document.getElementById("internalDeadline").value.trim();
+
+            dateError.textContent = "";
+            facultyNewError.textContent = "";
+            prefixError.textContent = "";
+            fullnameError.textContent = "";
+            studentIdError.textContent = "";
+            phoneError.textContent = "";
+            programError.textContent = "";
+            studyTypeError.textContent = "";
+            majorOldError.textContent = "";
+            facultyOldError.textContent = "";
+            majorNewError.textContent = "";
+            reasonError.textContent = "";
+            qualificationError.textContent = "";
+
+            let valid = true;
+
+            if (!date) {
+                dateError.textContent = "กรุณากรอกวันที่";
+                valid = false;
+            }
+
+            if (!facultyNew) {
+                facultyNewError.textContent = "กรุณากรอกคณะใหม่";
+                valid = false;
+            }
+
+            if (!prefix) {
+                prefixError.textContent = "กรุณาเลือกคำนำหน้า";
+                valid = false;
+            }
+
+            const words = fullname.split(/\s+/).filter(Boolean);
+            if (words.length !== 2) {
+                fullnameError.textContent = 'กรุณากรอกชื่อและนามสกุล 2 คำ';
+                valid = false;
+            } else {
+                const [firstName, lastName] = words;
+                if (firstName.length < 2 || lastName.length < 2) {
+                    fullnameError.textContent = 'ชื่อและนามสกุลต้องมีความยาวอย่างน้อย 2 ตัวอักษร';
+                    valid = false;
+                }
+            }
+
+            if (!/^\d{10}$/.test(studentId)) {
+                studentIdError.textContent = "กรุณากรอกรหัสนักศึกษาให้ถูกต้อง (10 ตัวเลข)";
+                valid = false;
+            }
+            if (!/^(06|08|09)\d{8}$/.test(phone)) {
+                phoneError.textContent = "กรุณากรอกเบอร์โทรศัพท์ 10 หลัก ขึ้นต้นด้วย 06, 08 หรือ 09 เท่านั้น";
+                valid = false;
+            }
+
+            if (!program) {
+                programError.textContent = "กรุณาเลือกหลักสูตร";
+                valid = false;
+            }
+
+            if (!studyType) {
+                studyTypeError.textContent = "กรุณาเลือกภาคเรียน";
+                valid = false;
+            }
+
+            if (!majorOld) {
+                majorOldError.textContent = "กรุณากรอกสาขาวิชาเดิม";
+                valid = false;
+            }
+
+            if (!facultyOld) {
+                facultyOldError.textContent = "กรุณากรอกคณะเดิม";
+                valid = false;
+            }
+
+            if (!majorNew) {
+                majorNewError.textContent = "กรุณากรอกสาขาวิชาใหม่";
+                valid = false;
+            }
+
+            if (!reason) {
+                reasonError.textContent = "กรุณากรอกเหตุผลการโอนย้าย";
+                valid = false;
+            }
+
+            if (!internalDeadline) {
+                qualificationError.textContent = "กรุณากรอกวันที่กำหนดส่ง";
+                valid = false;
+            }
+
+            if (!qualificationCheck) {
+                qualificationError.textContent = "กรุณายืนยันคุณสมบัติ";
+                valid = false;
+            }
+
+            if (!valid) return;
+
+            // แสดง modal
+            document.getElementById("resultMessage").textContent = "ส่งคำร้องสำเร็จ";
+            document.getElementById("resultModal").classList.add("show");
+
+            this.reset();
+        });
+    </script>
+
+</body>
+
+</html>
